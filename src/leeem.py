@@ -16,13 +16,13 @@ def main():
 def run_test_wait_until_pressed():
     robot = rb.Snatch3rRobot()
     robot.touch_sensor.wait_until_pressed()
-    robot.drive_system.move_for_seconds(1)
+    print('this is stupid')
 
 
 def run_test_wait_until_released():
     robot = rb.Snatch3rRobot()
     robot.touch_sensor.wait_until_released()
-    robot.drive_system.move_for_seconds(1)
+    print('i dont like this')
 
 
 main()
