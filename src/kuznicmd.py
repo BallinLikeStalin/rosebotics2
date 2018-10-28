@@ -39,7 +39,7 @@ def run_test_wait_until_color_is():
     # print(rb.Color.RED.value)
     robot = rb.Snatch3rRobot()
 
-    robot.color_sensor.wait_until_color_is(rb.Color.RED.value)
+    robot.color_sensor.wait_until_color_is(rb.Color.YELLOW.value)
 
     print('YAY 3')
 

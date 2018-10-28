@@ -278,7 +278,7 @@ class ColorSensor(low_level_rb.ColorSensor):
 
         while True:
             if self.get_color() is color:
-                break
+                return 9
 
     def wait_until_color_is_one_of(self, colors):
         """
@@ -292,6 +292,11 @@ class ColorSensor(low_level_rb.ColorSensor):
             for k in range(len(colors)):
                 if self.get_color() is colors[k]:
                     return
+
+    def drive_until_color(self, robot, color):
+        robot.drive_system.start_moving(25, 25)
+        self.wait_until_color_is(color)
+        robot.drive_system.stop_moving()
 
 
 class InfraredSensorAsProximitySensor(object):
