@@ -300,6 +300,16 @@ class ColorSensor(low_level_rb.ColorSensor):
         self.wait_until_color_is(color)
         robot.drive_system.stop_moving()
 
+    def follow_line(self, robot):
+        robot.drive_system.start_moving(100, 100)
+        x = self.get_reflected_intensity()
+        while True:
+            if x > 50:
+                robot.drive_system.turn_degrees(5, 100)
+            x = self.get_reflected_intensity()
+            robot.drive_system.start_moving(100, 100)
+        robot.drive_system.stop_moving()
+
 
 class InfraredSensorAsProximitySensor(object):
     """ Primary author of this class:  PUT_YOUR_NAME_HERE. """

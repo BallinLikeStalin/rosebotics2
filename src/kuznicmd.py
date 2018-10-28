@@ -12,9 +12,9 @@ def main():
 
     # run_test_wait_until_intensity_is_less_than()
     # run_test_wait_until_intensity_is_greater_than()
-    run_test_wait_until_color_is()
+    # run_test_wait_until_color_is()
     # run_test_wait_until_color_is_one_of()
-
+    run_test_follow_line()
 
 def run_test_wait_until_intensity_is_less_than():
 
@@ -52,6 +52,13 @@ def run_test_wait_until_color_is_one_of():
                                                    rb.Color.RED])
 
     print('YAY 4')
+
+
+def run_test_follow_line():
+
+    robot = rb.Snatch3rRobot()
+
+    robot.color_sensor.follow_line(robot)
 
 
 main()
