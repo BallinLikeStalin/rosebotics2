@@ -28,12 +28,13 @@ def run_test_spin():
 def run_test_turn():
     robot = rb.Snatch3rRobot()
 
-    robot.drive_system.turn_degrees(-90)
+    robot.drive_system.turn_degrees(180/(4-2), 50)
 
 def run_test_polygon():
 
     robot = rb.Snatch3rRobot()
 
-    robot.drive_system.drive_polygon(4, 50)
+    robot.drive_system.drive_polygon(6, 75)
+
 
 main()

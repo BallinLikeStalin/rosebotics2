@@ -54,7 +54,7 @@ class Snatch3rRobot(object):
 class DriveSystem(object):
     """
     A class for driving (moving) the robot.
-    Primary authors:  entire team plus PUT_YOUR_NAME_HERE.
+    Primary authors:  entire team plus Owen Land.
     """
 
     def __init__(self,
@@ -108,7 +108,7 @@ class DriveSystem(object):
         # DONE: Do a few experiments to determine the constant that converts
         # DONE:   from wheel-degrees-spun to robot-inches-moved.
         # DONE:   Assume that the conversion is linear with respect to speed.
-
+        self.left_wheel.reset_degrees_spun()
         self.start_moving(duty_cycle_percent, duty_cycle_percent)
 
         while True:
@@ -168,14 +168,14 @@ class DriveSystem(object):
 
 
         while True:
-            if abs(self.left_wheel.get_degrees_spun()) > 11 * abs(degrees):
+            if abs(self.left_wheel.get_degrees_spun()) > 10 * abs(degrees):
                 self.stop_moving(stop_action)
                 break
 
     def drive_polygon(self, n, duty_cycle):
         for k in range(n):
             self.go_straight_inches(5, duty_cycle)
-            self.spin_in_place_degrees(360/n, duty_cycle)
+            self.turn_degrees(180-(180*(n-2)/n), duty_cycle)
 
 
 # class ArmAndClaw(object):
@@ -279,6 +279,8 @@ class ColorSensor(low_level_rb.ColorSensor):
         while True:
             if self.get_color() is color:
                 return 9
+
+
 
     def wait_until_color_is_one_of(self, colors):
         """
