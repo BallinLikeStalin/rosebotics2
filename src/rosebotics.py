@@ -166,7 +166,6 @@ class DriveSystem(object):
             z = -1
             self.start_moving((z * duty_cycle_percent), 0 )
 
-
         while True:
             if abs(self.left_wheel.get_degrees_spun()) > 10 * abs(degrees):
                 self.stop_moving(stop_action)
