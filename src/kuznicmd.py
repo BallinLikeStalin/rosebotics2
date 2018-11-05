@@ -3,7 +3,7 @@
   Fall term, 2018-2019.
 """
 
-import rosebotics as rb
+import rosebotics_new as rb
 import time
 
 
@@ -14,7 +14,11 @@ def main():
     # run_test_wait_until_intensity_is_greater_than()
     # run_test_wait_until_color_is()
     # run_test_wait_until_color_is_one_of()
-    run_test_follow_line()
+    # run_test_follow_line()
+    run_test_raise_arm_and_close_claw()
+    # run_test_calibrate()
+    # run_test_move_arm_to_position()
+
 
 def run_test_wait_until_intensity_is_less_than():
 
@@ -59,6 +63,27 @@ def run_test_follow_line():
     robot = rb.Snatch3rRobot()
 
     robot.color_sensor.follow_line(robot)
+
+
+def run_test_raise_arm_and_close_claw():
+
+    robot = rb.Snatch3rRobot()
+
+    robot.arm.raise_arm_and_close_claw()
+
+
+def run_test_calibrate():
+
+    robot = rb.Snatch3rRobot()
+
+    robot.arm.calibrate()
+
+
+def run_test_move_arm_to_position():
+
+    robot = rb.Snatch3rRobot()
+
+    robot.arm.move_arm_to_position((14.2 * 360) / (4 / 3))
 
 
 main()
