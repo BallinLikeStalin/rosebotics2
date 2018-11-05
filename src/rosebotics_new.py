@@ -491,6 +491,7 @@ class Camera(object):
                     self.low_level_camera.value(4))
 
 
+
 class Point(object):
     def __init__(self, x, y):
         self.x = x
