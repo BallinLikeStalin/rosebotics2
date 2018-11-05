@@ -541,9 +541,9 @@ class InfraredAsProximitySensor(low_level_rb.InfraredSensor):
     A class for the infrared sensor when it is in the mode in which it
     measures distance to the nearest object that it sees.
     Primary authors:  The ev3dev authors, David Mutchler, Dave Fisher,
-       their colleagues, the entire team, and PUT_YOUR_NAME_HERE.
+       their colleagues, the entire team, and Eric Lee.
     """
-    # TODO: In the above line, put the name of the primary author of this class.
+    # done: In the above line, put the name of the primary author of this class.
 
     def __init__(self, ir_sensor_port):
         super().__init__(ir_sensor_port)
@@ -569,8 +569,14 @@ class InfraredAsProximitySensor(low_level_rb.InfraredSensor):
         in inches, where about 39.37 inches (which is 100 cm) means no object
         is within its field of vision.
         """
-        inches_per_cm = 2.54
+        inches_per_cm = 1 / 2.54
         return 70 * inches_per_cm * self.get_distance_to_nearest_object() / 100
+
+    def beep_if_in_range(self):
+        while True:
+            if self.get_distance_to_nearest_object_in_inches() > 9:
+                if self.get_distance_to_nearest_object_in_inches() < 15:
+                    ev3.Sound.speak('beep')
 
 
 class InfraredAsBeaconSensor(object):

@@ -3,7 +3,6 @@
 import ev3dev.ev3 as ev3  # You need this!
 import time
 
-
 def main():
     print("Beeping:")
     ev3.Sound.beep().wait()
