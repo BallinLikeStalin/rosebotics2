@@ -493,7 +493,6 @@ class Camera(object):
                     self.low_level_camera.value(4))
 
 
-
 class Point(object):
     def __init__(self, x, y):
         self.x = x
@@ -800,7 +799,6 @@ class ArmAndClaw(object):
         """
         # TODO: Do this as STEP 3 of implementing this class.
 
-        self.calibrate()
         self.motor.start_spinning(100)
         while True:
             if abs(self.motor.get_degrees_spun()) >= position:
