@@ -91,6 +91,4 @@ def handle_go_forward(entry_box, mqtt_client):
     speed_string = entry_box.get()
     print("Sending the go_forward message with speed", speed_string)
     mqtt_client.send_message('go_forward', [speed_string])
-
-
 main()
