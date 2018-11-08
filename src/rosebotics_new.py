@@ -653,7 +653,6 @@ class InfraredAsBeaconButtonSensor(object):
             "beacon": BEACON_BUTTON
         }
 
-
     def set_channel(self, channel):
         """
         Makes this sensor look for signals on the given channel. The physical
@@ -665,14 +664,14 @@ class InfraredAsBeaconButtonSensor(object):
     def get_channel(self):
         return self.channel
 
-    # def get_buttons_pressed(self):
-    #     """
-    #     Returns a list of the numbers corresponding to buttons on the Beacon
-    #     which are currently pressed.
-    #     """
-    #     button_list = self._underlying_ir_sensor.buttons_pressed
-    #     for k in range(len(button_list)):
-    #         button_list[k] = self.button_names[button_list[k]]
+    def get_buttons_pressed(self):
+        """
+        Returns a list of the numbers corresponding to buttons on the Beacon
+        which are currently pressed.
+        """
+        button_list = self._underlying_ir_sensor.buttons_pressed
+        for k in range(len(button_list)):
+            button_list[k] = self.button_names[button_list[k]]
 
     def is_top_red_button_pressed(self):
         return self._underlying_ir_sensor.red_up
@@ -685,6 +684,16 @@ class InfraredAsBeaconButtonSensor(object):
 
     def is_bottom_blue_button_pressed(self):
         return self._underlying_ir_sensor.blue_down
+
+    def beep_if_top_red_is_pressed(self):
+        while True:
+            if self.is_top_red_button_pressed() is True:
+                ev3.Sound.tone(440, 300)
+
+    def speak_if_top_blue_is_pressed(self):
+        while True:
+            if self.is_top_blue_button_pressed() is True:
+                ev3.Sound.speak("Hello. How are you?")
 
 
 class BrickButtonSensor(object):
