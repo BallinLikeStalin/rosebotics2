@@ -31,6 +31,11 @@ def main():
     mqtt_client.connect_to_pc()
 
     while True:
+        if robot.beacon_button_sensor.is_top_red_button_pressed():
+            ev3.Sound.beep().wait()
+
+        if robot.beacon_button_sensor.is_top_blue_button_pressed():
+            ev3.Sound.speak('Hello. How are you?').wait()
 
         time.sleep(0.01)  # For the delegate to do its work
 

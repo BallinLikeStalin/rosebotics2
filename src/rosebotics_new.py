@@ -686,16 +686,6 @@ class InfraredAsBeaconButtonSensor(object):
     def is_bottom_blue_button_pressed(self):
         return self._underlying_ir_sensor.blue_down
 
-    def beep_if_top_red_is_pressed(self):
-        while True:
-            if self.is_top_red_button_pressed() is True:
-                ev3.Sound.tone(440, 300)
-
-    def speak_if_top_blue_is_pressed(self):
-        while True:
-            if self.is_top_blue_button_pressed() is True:
-                ev3.Sound.speak("Hello. How are you?")
-
 
 class BrickButtonSensor(object):
     """

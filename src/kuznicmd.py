@@ -12,14 +12,12 @@ def main():
 
     # run_test_wait_until_intensity_is_less_than()
     # run_test_wait_until_intensity_is_greater_than()
-    # run_test_wait_until_color_is()
+    run_test_wait_until_color_is()
     # run_test_wait_until_color_is_one_of()
     # run_test_follow_line()
     # run_test_raise_arm_and_close_claw()
     # run_test_calibrate()
     # run_test_move_arm_to_position()
-    # run_test_beep_if_top_red_is_pressed()
-    run_test_speak_if_top_blue_is_pressed()
 
 
 def run_test_wait_until_intensity_is_less_than():
@@ -74,17 +72,6 @@ def run_test_move_arm_to_position():
 
     robot = rb.Snatch3rRobot()
     robot.arm.move_arm_to_position((14.2 * 360) / (4 / 3))
-
-
-def run_test_beep_if_top_red_is_pressed():
-
-    robot = rb.Snatch3rRobot()
-    robot.beacon_button_sensor.beep_if_top_red_is_pressed()
-
-
-def run_test_speak_if_top_blue_is_pressed():
-    robot = rb.Snatch3rRobot()
-    robot.beacon_button_sensor.speak_if_top_blue_is_pressed()
 
 
 main()
