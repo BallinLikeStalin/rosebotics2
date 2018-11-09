@@ -132,7 +132,7 @@ class Snatch3rRobot(object):
         self.color_sensor = ColorSensor(color_sensor_port)
         self.camera = Camera(camera_port)
 
-        # self.proximity_sensor = InfraredAsProximitySensor(ir_sensor_port)
+        #self.proximity_sensor = InfraredAsProximitySensor(ir_sensor_port)
         # self.beacon_sensor = InfraredAsBeaconSensor(channel=1)
         self.beacon_button_sensor = InfraredAsBeaconButtonSensor(channel=1)
 
@@ -216,11 +216,16 @@ class DriveSystem(object):
         # DONE: Don't forget that the Wheel object's position begins wherever
         # DONE:   it last was, not necessarily 0.
 
+        if inches > 0:
+            z = 1
+        if inches < 0:
+            z = -1
+
         self.left_wheel.reset_degrees_spun()
-        self.start_moving(duty_cycle_percent, duty_cycle_percent)
+        self.start_moving(z * duty_cycle_percent, z * duty_cycle_percent)
 
         while True:
-            if self.left_wheel.get_degrees_spun() > inches * 85:
+            if abs(self.left_wheel.get_degrees_spun()) > abs(inches) * 85:
                 self.stop_moving()
                 break
 
@@ -253,7 +258,7 @@ class DriveSystem(object):
 
         while True:
             if self.left_wheel.get_degrees_spun() > 5.5 * abs(degrees):
-                self.stop_moving(stop_action)
+                self.stop_moving()
                 break
 
     def turn_degrees(self,
@@ -285,7 +290,7 @@ class DriveSystem(object):
 
         while True:
             if abs(self.left_wheel.get_degrees_spun()) > 10 * abs(degrees):
-                self.stop_moving(stop_action)
+                self.stop_moving()
                 break
 
     def drive_polygon(self, n, duty_cycle):
@@ -429,13 +434,13 @@ class ColorSensor(low_level_rb.ColorSensor):
         robot.drive_system.stop_moving()
 
     def follow_line(self, robot):
-        robot.drive_system.start_moving(100, 100)
+        robot.drive_system.start_moving(50, 50)
         x = self.get_reflected_intensity()
         while True:
             if x > 50:
-                robot.drive_system.turn_degrees(5, 100)
+                robot.drive_system.turn_degrees(5, 50)
             x = self.get_reflected_intensity()
-            robot.drive_system.start_moving(100, 100)
+            robot.drive_system.start_moving(50, 50)
         robot.drive_system.stop_moving()
 
 
@@ -577,7 +582,7 @@ class InfraredAsProximitySensor(low_level_rb.InfraredSensor):
         while True:
             if self.get_distance_to_nearest_object_in_inches() > 9:
                 if self.get_distance_to_nearest_object_in_inches() < 15:
-                    ev3.Sound.speak('beep')
+                    ev3.Sound.speak('beep').wait()
 
 
 class InfraredAsBeaconSensor(object):
