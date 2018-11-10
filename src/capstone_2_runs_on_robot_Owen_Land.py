@@ -13,9 +13,6 @@ Authors:  David Mutchler, his colleagues, and Owen Land.
 # ------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------------------
-# TODO: 2. With your instructor, review the "big picture" of laptop-robot
-# TODO:    communication, per the comment in mqtt_sender.py.
-# TODO:    Once you understand the "big picture", delete this TODO.
 # ------------------------------------------------------------------------------
 
 import rosebotics_new as rb
@@ -31,13 +28,9 @@ def main():
     mqtt_client.connect_to_pc()
 
     while True:
-        if robot.beacon_button_sensor.is_top_red_button_pressed():
-            ev3.Sound.beep().wait()
-
-        if robot.beacon_button_sensor.is_top_blue_button_pressed():
-            ev3.Sound.speak('Hello. How are you?').wait()
 
         time.sleep(0.01)  # For the delegate to do its work
+
 
 class RemoteControlEtc(object):
     def __init__(self, robot):
@@ -52,6 +45,25 @@ class RemoteControlEtc(object):
         speed = int(speed_string)
         self.robot.drive_system.start_moving(speed, speed)
 
+        while True:
+            if self.robot.proximity_sensor.get_distance_to_nearest_object() < 5:
+                self.robot.drive_system.stop_moving()
+                self.robot.arm.raise_arm_and_close_claw()
+                time.sleep(5)
+                break
+            break
+
+        while True:
+            if self.robot.color_sensor.get_color() is rb.Color.BLUE:
+                self.robot.drive_system.stop_moving()
+                self.robot.arm.calibrate()
+                time.sleep(5)
+                ev3.Sound.speak("Looks Cold Now").wait()
+                self.robot.arm.raise_arm_and_close_claw()
+                ev3.Sound.speak("Cheers").wait()
+                break
+            break
+
     def go_backward(self, speed_string):
         print('Telling the robot to start moving at', speed_string)
         speed = int(speed_string)
@@ -60,12 +72,15 @@ class RemoteControlEtc(object):
     def go_left(self, degrees_string):
         print('Telling the robot to turn left', degrees_string)
         degrees = int(degrees_string)
-        self.robot.drive_system.turn_degrees(degrees, 50)
+        self.robot.drive_system.turn_degrees(-degrees, 50)
 
     def go_right(self, degrees_string):
         print('Telling the robot to turn right', degrees_string)
         degrees = int(degrees_string)
-        self.robot.drive_system.turn_degrees(-degrees, 50)
+        self.robot.drive_system.turn_degrees(degrees, 50)
+
+    def stop_moving(self):
+        self.robot.drive_system.stop_moving()
 
 
 main()
