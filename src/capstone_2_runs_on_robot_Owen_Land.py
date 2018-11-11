@@ -26,10 +26,20 @@ def main():
     rc = RemoteControlEtc(robot)
     mqtt_client = com.MqttClient(rc)
     mqtt_client.connect_to_pc()
-
+    x = 0
     while True:
+        if robot.proximity_sensor.get_distance_to_nearest_object() < 5 and x < 5:
+            robot.drive_system.stop_moving()
+            robot.arm.raise_arm_and_close_claw()
+            x = 5
+        if robot.color_sensor.get_color() == 2 and x == 5:
+            robot.drive_system.stop_moving()
+            robot.arm.calibrate()
+            ev3.Sound.set_volume(100)
+            ev3.Sound.speak("Dilly Dilly").wait()
+            x = 6
 
-        time.sleep(0.01)  # For the delegate to do its work
+        time.sleep(0.1)
 
 
 class RemoteControlEtc(object):
@@ -44,25 +54,6 @@ class RemoteControlEtc(object):
         print('Telling the robot to start moving at', speed_string)
         speed = int(speed_string)
         self.robot.drive_system.start_moving(speed, speed)
-
-        while True:
-            if self.robot.proximity_sensor.get_distance_to_nearest_object() < 5:
-                self.robot.drive_system.stop_moving()
-                self.robot.arm.raise_arm_and_close_claw()
-                time.sleep(5)
-                break
-            break
-
-        while True:
-            if self.robot.color_sensor.get_color() is rb.Color.BLUE:
-                self.robot.drive_system.stop_moving()
-                self.robot.arm.calibrate()
-                time.sleep(5)
-                ev3.Sound.speak("Looks Cold Now").wait()
-                self.robot.arm.raise_arm_and_close_claw()
-                ev3.Sound.speak("Cheers").wait()
-                break
-            break
 
     def go_backward(self, speed_string):
         print('Telling the robot to start moving at', speed_string)
@@ -81,6 +72,9 @@ class RemoteControlEtc(object):
 
     def stop_moving(self):
         self.robot.drive_system.stop_moving()
+
+    def raise_arm(self):
+        self.robot.arm.raise_arm_and_close_claw()
 
 
 main()

@@ -14,7 +14,6 @@ import tkinter
 from tkinter import ttk
 import mqtt_remote_method_calls as com
 
-
 def main():
     """ Constructs and runs a GUI for this program. """
     root = tkinter.Tk()
@@ -36,19 +35,19 @@ def setup_gui(root_window, mqtt_client):
 
     speed_entry_box = ttk.Entry(frame)
     degrees_entry_box = ttk.Entry(frame)
-    go_forward_button = ttk.Button(frame, text="Forward")
-    go_backward_button = ttk.Button(frame, text="Backward")
-    go_left_button = ttk.Button(frame, text="Turn Left")
-    go_right_button = ttk.Button(frame, text="Turn Right")
+    go_forward_button = ttk.Button(frame, text="Forward", padding=10)
+    go_backward_button = ttk.Button(frame, text="Backward", padding=10)
+    go_left_button = ttk.Button(frame, text="Turn Left", padding=10)
+    go_right_button = ttk.Button(frame, text="Turn Right", padding=10)
     stop_button = ttk.Button(frame, text="Stop")
 
-    speed_entry_box.grid()
-    degrees_entry_box.grid()
-    go_forward_button.grid()
-    go_backward_button.grid()
-    go_left_button.grid()
-    go_right_button.grid()
-    stop_button.grid()
+    speed_entry_box.grid(row=1, column=1, columnspan=2)
+    degrees_entry_box.grid(row=1, column=3, columnspan=2)
+    go_forward_button.grid(row=2, column=1, pady=10)
+    go_backward_button.grid(row=2, column=2, pady=10)
+    go_left_button.grid(row=2, column=3, pady=10)
+    go_right_button.grid(row=2, column=4, pady=10)
+    stop_button.grid(row=4, column=2, columnspan=2, pady=10)
 
     go_forward_button['command'] = \
         lambda: handle_go_forward(speed_entry_box, mqtt_client)
@@ -110,6 +109,7 @@ def handle_stop(mqtt_client):
     """
     Tells the robot to stop moving
     """
+    print("Sending the stop message")
     mqtt_client.send_message('stop_moving')
 
 

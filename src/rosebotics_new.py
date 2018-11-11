@@ -580,9 +580,9 @@ class InfraredAsProximitySensor(low_level_rb.InfraredSensor):
 
     def beep_if_in_range(self):
         while True:
-            if self.get_distance_to_nearest_object_in_inches() > 9:
-                if self.get_distance_to_nearest_object_in_inches() < 15:
-                    ev3.Sound.speak('beep').wait()
+            if self.get_distance_to_nearest_object_in_inches() > 0:
+                if self.get_distance_to_nearest_object_in_inches() < 2:
+                    ev3.Sound.beep().wait()
 
 
 class InfraredAsBeaconSensor(object):
