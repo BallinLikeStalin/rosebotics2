@@ -88,4 +88,55 @@ class RemoteControlEtc(object):
         self.robot.drive_system.start_moving(speed, speed)
 
 
-main()
+# main()
+
+def run_game():
+    rover = rb.Snatch3rRobot()
+
+    rc = RemoteControl(rover)
+    mqtt_client = com.MqttClient(rc)
+    mqtt_client.connect_to_pc()
+
+    while True:
+        # print(rover.beacon_sensor.get_distance_to_beacon())
+        if abs(rover.beacon_sensor.get_distance_to_beacon()) == 0:
+            rover.drive_system.stop_moving()
+            rover.arm.raise_arm_and_close_claw()
+            break
+
+    while True:
+        if rover.color_sensor.get_reflected_intensity() > 50:
+            rover.drive_system.stop_moving()
+            rover.arm.calibrate()
+            break
+
+
+class RemoteControl(object):
+    def __init__(self, rover):
+        """
+        Stores the robot.
+            :type rover: rb.Snatch3rRobot
+        """
+        self.rover = rover
+
+    def turn_left(self):
+        self.stop()
+        self.rover.drive_system.start_spinning_left(50)
+
+    def turn_right(self):
+        self.stop()
+        self.rover.drive_system.start_spinning_right(50)
+
+    def move_forward(self):
+        self.stop()
+        self.rover.drive_system.start_moving(50, 50)
+
+    def move_backward(self):
+        self.stop()
+        self.rover.drive_system.start_moving(-50, -50)
+
+    def stop(self):
+        self.rover.drive_system.stop_moving()
+
+
+run_game()

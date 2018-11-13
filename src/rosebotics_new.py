@@ -132,9 +132,9 @@ class Snatch3rRobot(object):
         self.color_sensor = ColorSensor(color_sensor_port)
         self.camera = Camera(camera_port)
 
-        self.proximity_sensor = InfraredAsProximitySensor(ir_sensor_port)
-        # self.beacon_sensor = InfraredAsBeaconSensor(channel=1)
-        #self.beacon_button_sensor = InfraredAsBeaconButtonSensor(channel=1)
+        # self.proximity_sensor = InfraredAsProximitySensor(ir_sensor_port)
+        self.beacon_sensor = InfraredAsBeaconSensor(channel=1)
+        # self.beacon_button_sensor = InfraredAsBeaconButtonSensor(channel=1)
 
         self.brick_button_sensor = BrickButtonSensor()
 
@@ -297,6 +297,12 @@ class DriveSystem(object):
         for k in range(n):
             self.go_straight_inches(5, duty_cycle)
             self.turn_degrees(180-(180*(n-2)/n), duty_cycle)
+
+    def start_spinning_left(self, duty_cycle):
+        self.right_wheel.start_spinning(duty_cycle)
+
+    def start_spinning_right(self, duty_cycle):
+        self.left_wheel.start_spinning(duty_cycle)
 
 
 class TouchSensor(low_level_rb.TouchSensor):

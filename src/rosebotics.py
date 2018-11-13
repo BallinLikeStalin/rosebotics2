@@ -143,7 +143,6 @@ class DriveSystem(object):
                 self.stop_moving(stop_action)
                 break
 
-
     def turn_degrees(self,
                      degrees,
                      duty_cycle_percent=100,

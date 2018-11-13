@@ -117,4 +117,147 @@ def handle_go_forward(entry_box, mqtt_client):
     # --------------------------------------------------------------------------
 
 
-main()
+# main()
+
+def run_game():
+
+    mqtt_client = com.MqttClient()
+    mqtt_client.connect_to_ev3()
+
+    start_screen()
+    # speed_setting(mqtt_client)
+    driving_instructions(mqtt_client)
+
+
+def start_screen():
+    root = tkinter.Tk()
+    frame = ttk.Frame(root, padding=10)
+    frame.grid()
+
+    title = ttk.Label(frame, text='Welcome to Crash Landing!')
+    title.grid()
+
+    title_image = tkinter.PhotoImage(file='galaxy.gif')
+
+    pic = ttk.Label(frame, image=title_image)
+    pic.grid()
+
+    intro1 = ttk.Label(frame, text='You have crash landed on a strange planet.')
+    intro1.grid()
+    intro2 = ttk.Label(frame, text='Your ship has broken into three pieces, your leg is broken, and the only thing you '
+                                   'can control is your rover.')
+    intro2.grid()
+    intro3 = ttk.Label(frame, text='Your mission is to reassemble your ship and travel to it using nothing but your '
+                                   'rover.')
+    intro3.grid()
+
+    start_button = ttk.Button(frame, text='Start!')
+    start_button.grid()
+
+    start_button['command'] = lambda: close_window(root)
+
+    root.mainloop()
+
+'''
+def speed_setting(mqtt_client):
+    root = tkinter.Tk()
+
+    frame = ttk.Frame(root, padding=10)
+    frame.grid()
+
+    speed_box = ttk.Entry(frame)
+    speed_box.grid()
+
+    set_speed_button = ttk.Button(frame, text='Set Speed')
+    set_speed_button.grid()
+
+    set_speed_button['command'] = lambda: set_speed(root, speed_box, mqtt_client)
+
+    root.mainloop()
+
+
+def set_speed(root, speed_box, mqtt_client):
+    speed = speed_box.get()
+    mqtt_client.send_message('set_speed', [speed])
+
+    close_window(root)
+'''
+
+
+def driving_instructions(mqtt_client):
+    root = tkinter.Tk()
+    root.title('Instructions')
+
+    frame = ttk.Frame(root, padding=10)
+    frame.grid()
+
+    label_1 = ttk.Label(root, text='This is how you control your rover:')
+    label_1.grid()
+
+    label_2 = ttk.Label(root, text='')
+    label_2.grid()
+
+    label_3 = ttk.Label(root, text='Press the UP arrow key to move FORWARD.')
+    label_3.grid()
+
+    label_4 = ttk.Label(root, text='Press the DOWN arrow key to move BACKWARD.')
+    label_4.grid()
+
+    label_5 = ttk.Label(root, text='Press the LEFT arrow key to turn LEFT.')
+    label_5.grid()
+
+    label_6 = ttk.Label(root, text='Press the RIGHT arrow key to turn RIGHT.')
+    label_6.grid()
+
+    label_7 = ttk.Label(root, text='Press the SPACEBAR to STOP')
+    label_7.grid()
+
+    label_8 = ttk.Label(root, text='')
+    label_8.grid()
+
+    start_button = ttk.Button(root, text='Begin!')
+    start_button.grid()
+
+    label_9 = ttk.Label(root, text='Press this button to gain control of your rover.')
+    label_9.grid()
+
+    start_button.bind('<Up>', lambda event: move_forward(mqtt_client))
+    start_button.bind('<Down>', lambda event: move_backward(mqtt_client))
+    start_button.bind('<Left>', lambda event: turn_left(mqtt_client))
+    start_button.bind('<Right>', lambda event: turn_right(mqtt_client))
+    start_button.bind('<space>', lambda event: stop(mqtt_client))
+
+    label_10 = ttk.Label(root, text='')
+    label_10.grid()
+
+    label_11 = ttk.Label(root, text='Hurry! You are running out of air!')
+    label_11.grid()
+
+    root.mainloop()
+
+
+def move_forward(mqtt_client):
+    mqtt_client.send_message('move_forward')
+
+
+def move_backward(mqtt_client):
+    mqtt_client.send_message('move_backward')
+
+
+def turn_left(mqtt_client):
+    mqtt_client.send_message('turn_left')
+
+
+def turn_right(mqtt_client):
+    mqtt_client.send_message('turn_right')
+
+
+def stop(mqtt_client):
+    mqtt_client.send_message('stop')
+
+
+def close_window(root):
+    root.destroy()
+
+
+run_game()
