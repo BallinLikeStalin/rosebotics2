@@ -120,6 +120,9 @@ def handle_go_forward(entry_box, mqtt_client):
 # main()
 
 def run_game():
+    """
+    Runs the program that starts the game.
+    """
 
     mqtt_client = com.MqttClient()
     mqtt_client.connect_to_ev3()
@@ -127,14 +130,19 @@ def run_game():
     start_screen()
     # speed_setting(mqtt_client)
     driving_instructions(mqtt_client)
+    end_game()
 
 
 def start_screen():
+    """
+    Sets up the starting window that introduces the game.
+    """
+
     root = tkinter.Tk()
     frame = ttk.Frame(root, padding=10)
     frame.grid()
 
-    title = ttk.Label(frame, text='Welcome to Crash Landing!')
+    title = ttk.Label(frame, text='Welcome to Space Rescue!')
     title.grid()
 
     title_image = tkinter.PhotoImage(file='galaxy.gif')
@@ -142,13 +150,14 @@ def start_screen():
     pic = ttk.Label(frame, image=title_image)
     pic.grid()
 
-    intro1 = ttk.Label(frame, text='You have crash landed on a strange planet.')
+    intro1 = ttk.Label(frame, text='You are an astronaut on a strange planet trying to learn about the resources on the'
+                                   ' planet.')
     intro1.grid()
-    intro2 = ttk.Label(frame, text='Your ship has broken into three pieces, your leg is broken, and the only thing you '
-                                   'can control is your rover.')
+    intro2 = ttk.Label(frame, text='While out on one of your excavation missions, you fell off a cliff, broke your leg '
+                                   'and your suit is loosing air.')
     intro2.grid()
-    intro3 = ttk.Label(frame, text='Your mission is to reassemble your ship and travel to it using nothing but your '
-                                   'rover.')
+    intro3 = ttk.Label(frame, text='Your mission is to use your remote controlled rover to rescue you and take you back'
+                                   ' to your base before you run out of air.')
     intro3.grid()
 
     start_button = ttk.Button(frame, text='Start!')
@@ -158,105 +167,159 @@ def start_screen():
 
     root.mainloop()
 
-'''
-def speed_setting(mqtt_client):
-    root = tkinter.Tk()
-
-    frame = ttk.Frame(root, padding=10)
-    frame.grid()
-
-    speed_box = ttk.Entry(frame)
-    speed_box.grid()
-
-    set_speed_button = ttk.Button(frame, text='Set Speed')
-    set_speed_button.grid()
-
-    set_speed_button['command'] = lambda: set_speed(root, speed_box, mqtt_client)
-
-    root.mainloop()
-
-
-def set_speed(root, speed_box, mqtt_client):
-    speed = speed_box.get()
-    mqtt_client.send_message('set_speed', [speed])
-
-    close_window(root)
-'''
-
 
 def driving_instructions(mqtt_client):
+    """
+    Sets up the driving instructions window that tells the user how to control the robot.
+    Also, lets the user set the speed of the robot and control the robot.
+    """
+
     root = tkinter.Tk()
     root.title('Instructions')
 
     frame = ttk.Frame(root, padding=10)
     frame.grid()
 
-    label_1 = ttk.Label(root, text='This is how you control your rover:')
+    label_1 = ttk.Label(frame, text='This is how you control your rover:')
     label_1.grid()
 
-    label_2 = ttk.Label(root, text='')
+    label_2 = ttk.Label(frame, text='')
     label_2.grid()
 
-    label_3 = ttk.Label(root, text='Press the UP arrow key to move FORWARD.')
+    label_3 = ttk.Label(frame, text='Press the UP arrow key to move FORWARD.')
     label_3.grid()
 
-    label_4 = ttk.Label(root, text='Press the DOWN arrow key to move BACKWARD.')
+    label_4 = ttk.Label(frame, text='Press the DOWN arrow key to move BACKWARD.')
     label_4.grid()
 
-    label_5 = ttk.Label(root, text='Press the LEFT arrow key to turn LEFT.')
+    label_5 = ttk.Label(frame, text='Press the LEFT arrow key to turn LEFT.')
     label_5.grid()
 
-    label_6 = ttk.Label(root, text='Press the RIGHT arrow key to turn RIGHT.')
+    label_6 = ttk.Label(frame, text='Press the RIGHT arrow key to turn RIGHT.')
     label_6.grid()
 
-    label_7 = ttk.Label(root, text='Press the SPACEBAR to STOP')
+    label_7 = ttk.Label(frame, text='Press the SPACEBAR to STOP')
     label_7.grid()
 
-    label_8 = ttk.Label(root, text='')
+    label_8 = ttk.Label(frame, text='')
     label_8.grid()
 
-    start_button = ttk.Button(root, text='Begin!')
-    start_button.grid()
+    speed_label = ttk.Label(frame, text='Type a speed from 0 to 100 in the box below.')
+    speed_label.grid()
 
-    label_9 = ttk.Label(root, text='Press this button to gain control of your rover.')
+    speed_box = ttk.Entry(frame)
+    speed_box.grid()
+
+    label_9 = ttk.Label(frame, text='')
     label_9.grid()
 
-    start_button.bind('<Up>', lambda event: move_forward(mqtt_client))
-    start_button.bind('<Down>', lambda event: move_backward(mqtt_client))
-    start_button.bind('<Left>', lambda event: turn_left(mqtt_client))
-    start_button.bind('<Right>', lambda event: turn_right(mqtt_client))
-    start_button.bind('<space>', lambda event: stop(mqtt_client))
-
-    label_10 = ttk.Label(root, text='')
+    label_10 = ttk.Label(frame, text='Press this button to gain control of your rover.')
     label_10.grid()
 
-    label_11 = ttk.Label(root, text='Hurry! You are running out of air!')
+    start_button = ttk.Button(frame, text='Begin!')
+    start_button.grid()
+
+    start_button.bind('<Up>', lambda event: move_forward(speed_box, mqtt_client))
+    start_button.bind('<Down>', lambda event: move_backward(speed_box, mqtt_client))
+    start_button.bind('<Left>', lambda event: turn_left(speed_box, mqtt_client))
+    start_button.bind('<Right>', lambda event: turn_right(speed_box, mqtt_client))
+    start_button.bind('<space>', lambda event: stop(mqtt_client))
+
+    label_11 = ttk.Label(frame, text='')
     label_11.grid()
+
+    label_12 = ttk.Label(frame, text='Hurry! You are running out of air!')
+    label_12.grid()
 
     root.mainloop()
 
 
-def move_forward(mqtt_client):
-    mqtt_client.send_message('move_forward')
+def end_game():
+    """
+    Sets up the window that shows up when the user finishes the game.
+    """
+
+    root = tkinter.Tk()
+    root.title('Congratulations!')
+
+    frame = ttk.Frame(root, padding=10)
+    frame.grid()
+
+    label_1 = ttk.Label(frame, text='You finished the game!!!')
+    label_1.grid()
+
+    label_2 = ttk.Label(frame, text='')
+    label_2.grid()
+
+    label_3 = ttk.Label(frame, text='Thank you for playing "Space Rescue!".')
+    label_3.grid()
+
+    label_4 = ttk.Label(frame, text='Made by: Michael Kuznicki')
+    label_4.grid()
+
+    label_5 = ttk.Label(frame, text='')
+    label_5.grid()
+
+    label_6 = ttk.Label(frame, text='Feel free to run and play as many times as you like.')
+    label_6.grid()
+
+    root.mainloop()
 
 
-def move_backward(mqtt_client):
-    mqtt_client.send_message('move_backward')
+def move_forward(speed_box, mqtt_client):
+    """
+    Tells the robot to move forward at a given speed.
+    """
+
+    speed = speed_box.get()
+    print('Sending the move_forward message with speed:', speed)
+    mqtt_client.send_message('move_forward', [speed])
 
 
-def turn_left(mqtt_client):
-    mqtt_client.send_message('turn_left')
+def move_backward(speed_box, mqtt_client):
+    """
+    Tells the robot to move backward at a given speed.
+    """
+
+    speed = speed_box.get()
+    print('Sending the move_backward message with speed:', speed)
+    mqtt_client.send_message('move_backward', [speed])
 
 
-def turn_right(mqtt_client):
-    mqtt_client.send_message('turn_right')
+def turn_left(speed_box, mqtt_client):
+    """
+    Tells the robot to turn left at a given speed.
+    """
+
+    speed = speed_box.get()
+    print('Sending the turn_left message with speed:', speed)
+    mqtt_client.send_message('turn_left', [speed])
+
+
+def turn_right(speed_box, mqtt_client):
+    """
+    Tells the robot to turn right at a given speed.
+    """
+
+    speed = speed_box.get()
+    print('Sending the turn_right message with speed:', speed)
+    mqtt_client.send_message('turn_right', [speed])
 
 
 def stop(mqtt_client):
+    """
+    Tells the robot to stop.
+    """
+
+    print('Sending the stop message')
     mqtt_client.send_message('stop')
 
 
 def close_window(root):
+    """
+    Closes the given window.
+    """
+
     root.destroy()
 
 

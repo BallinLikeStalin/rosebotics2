@@ -91,6 +91,12 @@ class RemoteControlEtc(object):
 # main()
 
 def run_game():
+    """
+    Constructs the robot.
+    Tells the robot to stop moving and raise its arm when it is 0 inches away from the beacon.
+    Also, tells the robot to wait until it sees a color with an intensity greater than 50 (white).
+    """
+
     rover = rb.Snatch3rRobot()
 
     rc = RemoteControl(rover)
@@ -98,17 +104,16 @@ def run_game():
     mqtt_client.connect_to_pc()
 
     while True:
-        # print(rover.beacon_sensor.get_distance_to_beacon())
         if abs(rover.beacon_sensor.get_distance_to_beacon()) == 0:
             rover.drive_system.stop_moving()
             rover.arm.raise_arm_and_close_claw()
-            break
 
-    while True:
         if rover.color_sensor.get_reflected_intensity() > 50:
             rover.drive_system.stop_moving()
             rover.arm.calibrate()
             break
+
+        time.sleep(0.01)
 
 
 class RemoteControl(object):
@@ -119,23 +124,51 @@ class RemoteControl(object):
         """
         self.rover = rover
 
-    def turn_left(self):
-        self.stop()
-        self.rover.drive_system.start_spinning_left(50)
+    def turn_left(self, speed):
+        """
+        Tells the robot to turn left at a given speed.
+        """
 
-    def turn_right(self):
         self.stop()
-        self.rover.drive_system.start_spinning_right(50)
+        print('Telling the robot to turn left at the speed: ', speed)
+        speed = int(speed)
+        self.rover.drive_system.start_spinning_left(speed)
 
-    def move_forward(self):
-        self.stop()
-        self.rover.drive_system.start_moving(50, 50)
+    def turn_right(self, speed):
+        """
+        Tells the robot to turn right at a given speed.
+        """
 
-    def move_backward(self):
         self.stop()
-        self.rover.drive_system.start_moving(-50, -50)
+        print('Telling the robot to turn right at the speed: ', speed)
+        speed = int(speed)
+        self.rover.drive_system.start_spinning_right(speed)
+
+    def move_forward(self, speed):
+        """
+        Tells the robot to move forward at a given speed.
+        """
+
+        self.stop()
+        print('Telling the robot to move forward at the speed: ', speed)
+        speed = int(speed)
+        self.rover.drive_system.start_moving(speed, speed)
+
+    def move_backward(self, speed):
+        """
+        Tells the robot to move backward at a given speed.
+        """
+
+        self.stop()
+        print('Telling the robot to move backward at the speed: ', speed)
+        speed = int(speed)
+        self.rover.drive_system.start_moving(-speed, -speed)
 
     def stop(self):
+        """
+        Tells the robot to stop.
+        """
+
         self.rover.drive_system.stop_moving()
 
 
